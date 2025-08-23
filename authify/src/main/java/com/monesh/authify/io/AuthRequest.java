@@ -2,42 +2,29 @@ package com.monesh.authify.io;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class ProfileRequest {
-    
-    @NotBlank(message = "Name is required")
-    private String name;
+public class AuthRequest {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotNull(message = "Password cannot be null")
+    @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
     // Default constructor
-    public ProfileRequest() {
+    public AuthRequest() {
     }
 
     // All-args constructor
-    public ProfileRequest(String name, String email, String password) {
-        this.name = name;
+    public AuthRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
     // Getters and setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -54,12 +41,12 @@ public class ProfileRequest {
         this.password = password;
     }
 
+    // Clean toString (for debugging, avoid printing full password in production logs)
     @Override
     public String toString() {
-        return "ProfileRequest{" +
-                "name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+        return "AuthRequest{" +
+                "email='" + email + '\'' +
+                ", password='******'" +  // hide password for safety
                 '}';
     }
 }

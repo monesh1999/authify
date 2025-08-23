@@ -1,5 +1,7 @@
 package com.monesh.authify.io;
 
+import com.monesh.authify.entity.UserEntity.Builder;
+
 public class ProfileResponse {
 
     private String userId;
@@ -62,4 +64,9 @@ public class ProfileResponse {
                 ", isAccountVerified=" + isAccountVerified +
                 '}';
     }
+
+	public static Builder builder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

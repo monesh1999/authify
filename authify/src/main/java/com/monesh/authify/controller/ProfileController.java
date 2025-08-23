@@ -12,6 +12,8 @@ import com.monesh.authify.io.ProfileRequest;
 import com.monesh.authify.io.ProfileResponse;
 import com.monesh.authify.service.ProfileService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 public class ProfileController {
@@ -25,7 +27,7 @@ public class ProfileController {
     
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProfileResponse register(@RequestBody ProfileRequest request) {
+    public ProfileResponse register(@Valid @RequestBody ProfileRequest request) {
         ProfileResponse response = profileService.createProfile(request); 
         return response;
     }
