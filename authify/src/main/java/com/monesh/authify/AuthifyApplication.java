@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AuthifyApplication {
 
 	public static void main(String[] args) {
+		System.setProperty("logging.level.org.springframework.security", "DEBUG");
 		SpringApplication.run(AuthifyApplication.class, args);
 	}
 

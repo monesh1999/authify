@@ -16,11 +16,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import com.monesh.authify.filter.JwtRequestFilter;
 import com.monesh.authify.service.AppUserDetailsService;
 
 
@@ -29,22 +31,17 @@ import com.monesh.authify.service.AppUserDetailsService;
 public class SecurityConfig {
 	
 	private final AppUserDetailsService appUserDetailsService;
+	private final JwtRequestFilter jwtRequestFilter;
+	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	
-	public SecurityConfig(AppUserDetailsService appUserDetailsService) {
+	public SecurityConfig(AppUserDetailsService appUserDetailsService ,JwtRequestFilter jwtRequestFilter,CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.appUserDetailsService = appUserDetailsService;
+        this.jwtRequestFilter =jwtRequestFilter;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
 	}
 	
 	
-//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//		http.cors(Customizer.withDefaults())
-//		.csrf(AbstractHttpConfigurer::disable)
-//		.authorizeHttpRequests(auth -> auth
-//				.requestMatchers("/login","/register","/send-reset-otp","/reset-password","/logout").permitAll().anyRequest().permitAll()
-//		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//		.logout(AbstractHttpConfigurer::disable);
-//		return http.build();
-//		
-//	}
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http.cors(Customizer.withDefaults())
@@ -55,7 +52,9 @@ public class SecurityConfig {
 	            .anyRequest().authenticated()  // everything else requires JWT
 	        )
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	        .logout(AbstractHttpConfigurer::disable);
+	        .logout(AbstractHttpConfigurer::disable)
+	        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+	        .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthenticationEntryPoint));
 
 	    // Add JWT filter here if you have it
 	    // http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
