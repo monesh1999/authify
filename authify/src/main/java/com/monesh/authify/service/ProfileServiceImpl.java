@@ -18,6 +18,7 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserRepo userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     // Constructor injection (Spring will automatically autowire this)
     public ProfileServiceImpl(UserRepo userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -35,29 +36,23 @@ public class ProfileServiceImpl implements ProfileService {
         
     }
 
-//    private UserEntity convertToUserEntity(ProfileRequest request) {
-//        UserEntity entity = new UserEntity();
-//        entity.setUserId(UUID.randomUUID().toString());
-//        entity.setName(request.getName());
-//        entity.setEmail(request.getEmail());
-//        entity.setPassword(request.getPassword()); // plain for now
-//        entity.setIsAccountVerified(false);
-//        return entity;
-//    }
-    
     private UserEntity convertToUserEntity(ProfileRequest request) {
-        return UserEntity.builder()
-                .userId(UUID.randomUUID().toString())
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword())) // plain for now
-                .isAccountVerified(false)
-                .verifyOtp(null)                  // default null
-                .verifyOtpExpireAt(0L) // e.g., 10 min expiry
-                .resetOtp(null)                   // default null
-                .resetOtpExpiredAt(null)          // default null
-                .build();
+        UserEntity entity = new UserEntity();
+        entity.setUserId(UUID.randomUUID().toString());
+        entity.setName(request.getName());
+        entity.setEmail(request.getEmail());
+        entity.setPassword(passwordEncoder.encode(request.getPassword())); // plain for now
+        entity.setIsAccountVerified(false);
+        entity.setVerifyOtp(null);
+        entity.setVerifyOtpExpireAt(0L);
+        entity.setResetOtp(null);
+        entity.setResetOtpExpiredAt(null);
+        return entity;
     }
+    
+
+    
+    
 
 
 

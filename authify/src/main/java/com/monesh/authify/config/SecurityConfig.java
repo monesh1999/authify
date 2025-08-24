@@ -35,22 +35,39 @@ public class SecurityConfig {
 	}
 	
 	
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-		http.cors(Customizer.withDefaults())
-		.csrf(AbstractHttpConfigurer::disable)
-		.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/login","/register","/send-reset-otp","/reset-password","/logout")
-				.permitAll().anyRequest().authenticated())
-		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-		.logout(AbstractHttpConfigurer::disable);
-		return http.build();
-		
+//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+//		http.cors(Customizer.withDefaults())
+//		.csrf(AbstractHttpConfigurer::disable)
+//		.authorizeHttpRequests(auth -> auth
+//				.requestMatchers("/login","/register","/send-reset-otp","/reset-password","/logout").permitAll().anyRequest().permitAll()
+//		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//		.logout(AbstractHttpConfigurer::disable);
+//		return http.build();
+//		
+//	}
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	    http.cors(Customizer.withDefaults())
+	        .csrf(AbstractHttpConfigurer::disable)
+	        .authorizeHttpRequests(auth -> auth
+	            .requestMatchers("/login", "/register", "/send-reset-otp", "/reset-password", "/logout")
+	            .permitAll()  // public endpoints
+	            .anyRequest().authenticated()  // everything else requires JWT
+	        )
+	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	        .logout(AbstractHttpConfigurer::disable);
+
+	    // Add JWT filter here if you have it
+	    // http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+	    return http.build();
 	}
+
 	
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(12);
 	}
 	
 	@Bean
