@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.monesh.authify.io.ProfileRequest;
 import com.monesh.authify.io.ProfileResponse;
+import com.monesh.authify.service.EmailService;
 import com.monesh.authify.service.ProfileService;
 
 import jakarta.validation.Valid;
@@ -18,16 +19,18 @@ import jakarta.validation.Valid;
 public class ProfileController {
     
     private final ProfileService profileService;
+    private final EmailService emailService;
     
-    
-    public ProfileController(ProfileService profileService) {
+    public ProfileController(ProfileService profileService, EmailService emailService) {
         this.profileService = profileService;
+		this.emailService = emailService;
     }
     
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public ProfileResponse register(@Valid @RequestBody ProfileRequest request) {
         ProfileResponse response = profileService.createProfile(request); 
+        emailService.sendWelcome(response.getEmail(), response.getName());
         return response;
     }
     
