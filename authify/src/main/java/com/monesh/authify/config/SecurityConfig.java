@@ -75,18 +75,30 @@ public class SecurityConfig {
 	}
 
 
+//	private CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration config = new CorsConfiguration();
+//		config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
+//		config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
+//		config.setAllowedHeaders(List.of("Authorization","Content-Type"));
+//		config.setAllowCredentials(true);
+//		
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", config);
+//		return source;
+//		
+//	}
 	private CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
-		config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
-		config.setAllowedHeaders(List.of("Authorization","Content-Type"));
-		config.setAllowCredentials(true);
-		
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", config);
-		return source;
-		
+	    CorsConfiguration config = new CorsConfiguration();
+	    config.setAllowedOriginPatterns(List.of("http://localhost:5173")); // frontend
+	    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+	    config.setAllowedHeaders(List.of("*")); // allow all headers
+	    config.setAllowCredentials(true);
+
+	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    source.registerCorsConfiguration("/**", config);
+	    return source;
 	}
+
 	
 	
        

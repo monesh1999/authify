@@ -28,6 +28,7 @@ import com.monesh.authify.service.AppUserDetailsService;
 import com.monesh.authify.service.ProfileService;
 import com.monesh.authify.util.JwtUtil;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -138,5 +139,21 @@ public class AuthController {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
 		}
 	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<?> logout(HttpServletResponse response) {
+	    ResponseCookie cookie = ResponseCookie.from("jwt", "")
+	            .httpOnly(true)
+	            .secure(false) // set true in production with HTTPS
+	            .path("/")
+	            .maxAge(0)     // deletes cookie immediately
+	            .sameSite("Strict")
+	            .build();
+
+	    return ResponseEntity.ok()
+	            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+	            .body("Logged out Successfully!");
+	}
+
 
 }
