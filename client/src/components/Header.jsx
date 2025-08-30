@@ -9,7 +9,7 @@ const Header =() =>{
   className="text-center d-flex flex-column align-items-center justify-content-center py-5 px-3"
   style={{ minHeight: "80vh" }}
 >
-  <img src={assets.logo} alt="header" width={120} className="mb-4" />
+  <img src={assets.frontlogo} alt="header" width={120} className="mb-4" />
 
   <h5 className="fw-semibold">
     Hey {userData ? userData.name :'Developer'} <span role="img" aria-label="wave">👋</span>

@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Menubar = () => {
   const navigate = useNavigate();
@@ -29,6 +30,23 @@ const Menubar = () => {
         setIsLoggedIn(false)
         setUserData(false)
         navigate("/");
+      }
+      
+    } catch (err) {
+      console.error(err.response.data.message);
+    }
+  };
+
+    const sendVerificationOTP = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const response =await axios.post(backendUrl +"/send-otp");
+      if(response.status === 200){
+        navigate("/email-verify");
+        toast.success("OTP has been sent Successfully")
+      }
+      else{
+        toast.error("unable to send OTP");
       }
       
     } catch (err) {
@@ -73,7 +91,7 @@ const Menubar = () => {
                 <div
                   className="dropdown-item py-1 px-2"
                   style={{ cursor: "pointer" }}
-                  onClick={() => navigate("/verify-email")}
+                  onClick={sendVerificationOTP}
                 >
                   Verify email
                 </div>
