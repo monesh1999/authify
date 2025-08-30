@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useState, useContext } from "react";
+import { useState, useContext } from "react";   // ✅ added useContext
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
 import { toast } from "react-toastify";
@@ -10,13 +10,14 @@ const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const { backendUrl, loginUser, getUserData } = useContext(AppContext);
+  const [loading, setLoading] = useState(false);   // ✅ default false
+  const { backendUrl,setIsLoggedIn,getUserData } = useContext(AppContext);
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+
+    axios.defaults.withCredentials = true;
     setLoading(true);
 
     try {
@@ -30,25 +31,20 @@ const Login = () => {
 
         if (response.status === 201) {
           toast.success("Account created successfully.");
-          setIsCreateAccount(false); // go back to login form
+          navigate("/");
         } else {
           toast.error("Email already exists!");
         }
       } else {
         // Login
-        const response = await axios.post(
-          `${backendUrl}/login`,
-          { email, password },
-          {
-            headers: { "Content-Type": "application/json" },
-            // withCredentials: true // if backend uses cookies instead of JWT
-          }
-        );
+        const response = await axios.post(`${backendUrl}/login`, {
+          email,
+          password,
+        });
 
         if (response.status === 200) {
-          const token = response.data.token; // backend must return { token: "..." }
-          loginUser(token); // save token in context + localStorage
-          await getUserData(); // fetch profile
+          setIsLoggedIn(true);
+          getUserData(); 
           toast.success("Login successful.");
           navigate("/");
         } else {
@@ -160,7 +156,11 @@ const Login = () => {
             className="btn btn-primary w-100 rounded-pill"
             disabled={loading}
           >
-            {loading ? "Loading...." : isCreateAccount ? "Sign Up" : "Login"}
+            {loading
+              ? "Loading...."
+              : isCreateAccount
+              ? "Sign Up"
+              : "Login"}
           </button>
         </form>
 
