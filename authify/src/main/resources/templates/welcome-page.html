@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Email</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f3f4f6; margin:0; padding:0; }
+        .container { width: 100%; max-width: 600px; margin: auto; background: #ffffff; border-radius: 8px; overflow: hidden; }
+        .header { background: linear-gradient(90deg,#6a5af9,#8268f9); text-align: center; padding: 20px; color: #ffffff; }
+        .header img { width: 120px; margin-bottom: 8px; }
+        .content { padding: 32px; color: #374151; }
+        .content h2 { color: #111827; }
+        .button { display: inline-block; background-color: #6a5af9; color: #ffffff; padding: 12px 22px; text-decoration: none; border-radius: 6px; font-weight: 600; margin: 18px 0; }
+        .footer { background: #f9fafb; padding: 20px; font-size: 13px; color: #9ca3af; text-align: center; }
+        a { color: #6a5af9; text-decoration: none; }
+        hr { border: none; border-top: 1px solid #e6e6e6; margin: 18px 0; }
+    </style>
+</head>
+<body>
+
+<!-- Preheader (invisible) -->
+<div style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+    <span th:text="${preheader}">Welcome to Authify — activate your account</span>
+</div>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <img th:src="${logoUrl}" alt="Logo"/>
+        <h1 th:text="${brandName}">Authify</h1>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h2>Welcome, <span th:text="${user != null ? user.name : 'User'}">User</span> 👋</h2>
+        <p>Thank you for registering at <strong th:text="${brandName}">Authify</strong>. We're excited to have you on board.</p>
+
+        <a th:href="${activationLink}" class="button">Activate your account</a>
+
+        <p>Or copy / paste this link into your browser:</p>
+        <p><a th:href="${activationLink}" th:text="${activationLink}">https://example.com/activate/...</a></p>
+
+        <hr/>
+
+        <p>Here are some quick links to get started:</p>
+        <ul>
+            <li><a th:href="${helpUrl}">Help or Support</a></li>
+            <li><a th:href="${profileUrl}">Complete your profile</a></li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Account: <span th:text="${user != null ? user.email : 'user@example.com'}">rjmonesh@gmail.com</span></p>
+        <p>Member since: <span th:text="${#dates.format(registrationDate, 'dd MMM yyyy')}">01 Jan 2025</span></p>
+        <p>Need help? <a th:href="${supportUrl}">Contact support</a></p>
+        <p>© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> <span th:text="${brandName}">Authify</span>. All rights reserved.</p>
+        <p style="font-size:11px;">If you didn't create an account, ignore this email or <a th:href="${reportUrl}">report it</a>.</p>
+    </div>
+</div>
+
+</body>
+</html>

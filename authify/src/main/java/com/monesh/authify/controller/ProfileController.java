@@ -13,6 +13,7 @@ import com.monesh.authify.io.ProfileResponse;
 import com.monesh.authify.service.EmailService;
 import com.monesh.authify.service.ProfileService;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -28,11 +29,20 @@ public class ProfileController {
     
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProfileResponse register(@Valid @RequestBody ProfileRequest request) {
+    public ProfileResponse register(@Valid @RequestBody ProfileRequest request) throws MessagingException {
         ProfileResponse response = profileService.createProfile(request); 
         emailService.sendWelcome(response.getEmail(), response.getName());
         return response;
     }
+
+    
+    
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public ProfileResponse register(@Valid @RequestBody ProfileRequest request) {
+//        ProfileResponse response = profileService.createProfile(request); 
+//        emailService.sendWelcome(response.getEmail(), response.getName());
+//        return response;
+//    }
     
     @GetMapping("/test")
     public String test() {
